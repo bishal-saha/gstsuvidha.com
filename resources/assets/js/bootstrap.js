@@ -9,9 +9,11 @@ window.Popper = require('popper.js').default;
  */
 
 try {
-    window.$ = window.jQuery = require('jquery');
+    // Bishal: commented below two lines to make compatibility with the current theme
+    // as current theme is already loading the bootstrap and jquery
+    //window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap');
+    //require('bootstrap');
 } catch (e) {}
 
 /**

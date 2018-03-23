@@ -9,7 +9,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4 page-title">
-                            <span class="fontawesome"><i class="fas fa-users"></i></span>
+                            <span class="fontawesome"><i class="far fa-id-badge"></i></span>
                             <h1> All Roles</h1>
                         </div>
                         <div class="col-md-8 ">
@@ -141,7 +141,7 @@
         </div>
     </div>
     <div>
-        <div class="fixed-bottom m-20">
+        <div class="fixed-bottom popupButton">
             <button @click="initCreate()" type="button" class="btn-raised btn btn-info btn-floating waves-effect waves-classic vertical-align-bottom float-right block font-size-20">
                 <i class="icon md-plus" aria-hidden="true"></i>
             </button>

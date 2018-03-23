@@ -1,0 +1,34 @@
+body {
+    font-weight: 400;
+}
+.table td, .table th {
+    vertical-align: middle;
+}
+.popupButton {
+    margin: 0 10px 40px 0;
+}
+.page-title h1{
+    display: inline;
+    font-size: 22px;
+}
+.page-title .fontawesome{
+    color: #3F51B5;
+    font-size: 22px;
+}
+.delete_all {
+    color: #FF9800;
+    font-size: 16px;
+}
+.delete_all:hover{
+    color: #F44336;
+}
+.showModal {
+    display: block; padding-right: 17px;
+}
+.invalid-data {
+    margin-top: .25rem;
+    font-size: .875rem;
+    color: #FF9800;
+}
+
+
