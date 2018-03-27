@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
             DB::table('users')->insert([
                 'name' => $faker->name,
                 'email' => $faker->unique()->email,
-                'password' => bcrypt('password'),
+                'password' => Hash::make('sigmasofts'),
                 'created_at' => $faker->dateTime,
                 'updated_at' => $faker->dateTime,
             ]);

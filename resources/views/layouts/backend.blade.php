@@ -14,8 +14,6 @@
     <link rel="apple-touch-icon" href="{{ asset('backend/assets/images/apple-touch-icon.png') }}">
     <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.ico') }}">
 
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ asset('backend/global/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/global/css/bootstrap-extend.min.css') }}">
@@ -36,6 +34,8 @@
     <link rel="stylesheet" href="{{ asset('backend/global/vendor/datatables.net-responsive-bs4/dataTables.responsive.bootstrap4.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/examples/css/tables/datatable.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/examples/css/uikit/modals.css') }}">
+
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <!-- Fonts -->
     <link rel="stylesheet" href="{{ asset('backend/global/fonts/material-design/material-design.min.css') }}">

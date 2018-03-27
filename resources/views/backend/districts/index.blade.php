@@ -1,5 +1,5 @@
 @extends('layouts.backend')
-@section('title', 'Users')
+@section('title', 'Districts')
 @section('page')
 <div class="page" id="myApp">
     <div class="page-content">
@@ -9,11 +9,11 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4 page-title">
-                            <span class="fontawesome"><i class="fas fa-users"></i></span>
-                            <h1> Manage Users</h1>
+                            <span class="fontawesome"><i class="fas fa-map-marker-alt"></i></span>
+                            <h1> Manage Districts</h1>
                         </div>
                         <div class="col-md-8 ">
-                            <form action="{{ route('users.index') }}" class="form-inline float-right" id="form_search" method="get">
+                            <form action="{{ route('districts.index') }}" class="form-inline float-right" id="form_search" method="get">
                                 <input type="hidden" name="sort" id="sort" value="{{ $sort }}">
                                 <input type="hidden" name="order" id="order" value="{{ $order }}">
                                 <div class="form-group">
@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <a href="{{ route('users.index') }}">
+                                        <a href="{{ route('districts.index') }}">
                                             <button data-toggle="tooltip" data-original-title="Refresh" type="button" class="btn btn-icon btn-primary waves-effect waves-classic">
                                                 <i class="icon md-refresh-alt" aria-hidden="true"></i>
                                             </button>
@@ -58,7 +58,7 @@
                                     </span>
                                 </th>
                                 <th width="4%">
-                                    @can('delete_users')
+                                    @can('delete_districts')
                                     <a @click="initDeleteAll" href="javascript:void(0);" class="delete_all" data-toggle="tooltip" data-original-title="Delete All" >
                                         <i class="far fa-trash-alt delete_all" aria-hidden="true"></i>
                                     </a>
@@ -73,61 +73,62 @@
                                         $sort_class_name = 'sorting';
                                     }
 
-                                    if($sort == 'created_at' && $order == 'asc') {
-                                        $sort_class_registration = 'sorting_asc';
-                                    } else if($sort == 'created_at' && $order == 'desc') {
-                                        $sort_class_registration = 'sorting_desc';
+                                    if($sort == 'code' && $order == 'asc') {
+                                        $sort_class_code = 'sorting_asc';
+                                    } else if($sort == 'code' && $order == 'desc') {
+                                        $sort_class_code = 'sorting_desc';
                                     } else {
-                                        $sort_class_registration = 'sorting';
+                                        $sort_class_code = 'sorting';
+                                    }
+
+                                    if($sort == 'abbreviation' && $order == 'asc') {
+                                        $sort_class_abbreviation = 'sorting_asc';
+                                    } else if($sort == 'abbreviation' && $order == 'desc') {
+                                        $sort_class_abbreviation = 'sorting_desc';
+                                    } else {
+                                        $sort_class_abbreviation = 'sorting';
+                                    }
+                                    if($sort == 'state' && $order == 'asc') {
+                                        $sort_class_state = 'sorting_asc';
+                                    } else if($sort == 'state' && $order == 'desc') {
+                                        $sort_class_state = 'sorting_desc';
+                                    } else {
+                                        $sort_class_state = 'sorting';
                                     }
                                 ?>
-                                <th width="20%" class="{{ $sort_class_name }}" id="sort_name" onclick="sortFields('name','{{ ($order=='asc')?'desc':'asc' }}');"  data-toggle="tooltip" data-original-title="Sort by name">Name</th>
-                                <th width="20%" class="{{ $sort_class_name }}" id="sort_name" onclick="sortFields('email','{{ ($order=='asc')?'desc':'asc' }}');"  data-toggle="tooltip" data-original-title="Sort by email">Email</th>
-                                <th width="20%">Role</th>
-                                <th width="20%" class="{{ $sort_class_registration }}" id="sort_registration" onclick="sortFields('created_at','{{ ($order=='asc')?'desc':'asc' }}')" data-toggle="tooltip" data-original-title="Sort by registration date">Registration</th>
+                                <th width="20%" class="{{ $sort_class_name }}" id="sort_name" onclick="sortFields('name','{{ ($order=='asc')?'desc':'asc' }}');"  data-toggle="tooltip" data-original-title="Sort by Name">District</th>
+                                <th width="20%" class="{{ $sort_class_state }}" id="sort_state" onclick="sortFields('state','{{ ($order=='asc')?'desc':'asc' }}')" data-toggle="tooltip" data-original-title="Sort by State">State</th>
+                                <th width="20%" class="{{ $sort_class_code }}" id="sort_code" onclick="sortFields('code','{{ ($order=='asc')?'desc':'asc' }}');"  data-toggle="tooltip" data-original-title="Sort by Code">Code</th>
+                                <th width="20%" class="{{ $sort_class_abbreviation }}" id="sort_abbreviation" onclick="sortFields('abbreviation','{{ ($order=='asc')?'desc':'asc' }}')" data-toggle="tooltip" data-original-title="Sort by Abbreviation">Abbreviation</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                                $limit_start = (($users->currentPage() - 1) * $users->perPage())+1;
-                                $limit_end   = ($users->currentPage() * $users->perPage());
+                                $limit_start = (($districts->currentPage() - 1) * $districts->perPage())+1;
+                                $limit_end   = ($districts->currentPage() * $districts->perPage());
                                 $row_id = $limit_start;
                             ?>
-                            @foreach ($users as $user)
+                            @foreach ($districts as $district)
                             <tr>
                                 <td>
                                     <span class="checkbox-custom checkbox-primary">
-                                        <input  v-model="selectedIds" type="checkbox" name="select_id" class="inputCheckbox selected_id" value="{{ $user->id }}">
+                                        <input  v-model="selectedIds" type="checkbox" name="select_id" class="inputCheckbox selected_id" value="{{ $district->id }}">
                                         <label for="inputCheckbox"></label>
                                     </span>
                                 </td>
                                 <td>{{ $row_id }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>
-                                    @foreach($user->roles()->pluck('name') as $roleName)
-                                        @if($roleName == 'Admin')
-                                            <span class="badge badge-success badge-custom">{{ $roleName }}</span>
-                                        @elseif($roleName == 'Associate')
-                                            <span class="badge badge-warning badge-custom">{{ $roleName }}</span>
-                                        @elseif($roleName == 'Kendra')
-                                            <span class="badge badge-info badge-custom">{{ $roleName }}</span>
-                                        @elseif($roleName == 'Tax Payer')
-                                            <span class="badge badge-info badge-primary">{{ $roleName }}</span>
-                                        @else
-                                            <span class="badge badge-dark badge-custom">{{ $roleName }}</span>
-                                        @endif
-                                    @endforeach
-                                </td>
-                                <td>{{ $user->created_at->format('F d, Y h:ia') }}</td>
-                                <td>
-                                    <button @click="initEdit({{ $user->id }})" data-toggle="tooltip" data-original-title="Edit"
+                                <td>{{ $district->name }}</td>
+                                <td>{{ $district->state->name }}</td>
+                                <td>{{ $district->code }}</td>
+                                <td>{{ $district->abbreviation }}</td>
+                                <td id="myNewApp">
+                                    <button @click="initEdit({{ $district->id }})" data-toggle="tooltip" data-original-title="Edit"
                                             class="btn btn-md btn-icon btn-pure btn-primary on-default edit-row waves-effect waves-light waves-round float-left" title="Edit">
                                         <i class="far fa-edit" aria-hidden="true"></i>
                                     </button>
-                                    @can('delete_users')
-                                    <button type="button" @click="initDelete({{ $user->id }})" data-toggle="tooltip" data-original-title="Delete"
+                                    @can('delete_districts')
+                                    <button type="button" @click="initDelete({{ $district->id }})" data-toggle="tooltip" data-original-title="Delete"
                                             class="btn btn-md btn-icon btn-pure btn-warning on-default edit-row waves-effect waves-light waves-round">
                                         <i class="far fa-trash-alt" aria-hidden="true"></i>
                                     </button>
@@ -142,24 +143,24 @@
                 <div class="container mt-30">
                     <div class="row">
                         <div class="col-md-3 vertical-align h-50 vertical-align-middle">
-                            Showing <strong>{{ $limit_start }}</strong> to <strong>{{ ($limit_end>=$users->total())?$users->total():$limit_end }}</strong> of <strong>{{ $users->total() }}</strong> entries
+                            Showing <strong>{{ $limit_start }}</strong> to <strong>{{ ($limit_end>=$districts->total())?$districts->total():$limit_end }}</strong> of <strong>{{ $districts->total() }}</strong> entries
                         </div>
                         <div class="col-md-6">
-                            {!! $users->appends([
+                            {!! $districts->appends([
                                             'sort' => $sort,
                                             'order' => $order,
                                             'limit' => $limit,
                                             'search' => $search
                                             ])->links() !!}</div>
                         <div class="col-md-3 text-right vertical-align h-50 vertical-align-middle">
-                            Page <strong>{{ $users->currentPage() }}</strong> of <strong>{{ $users->lastPage() }}</strong>
+                            Page <strong>{{ $districts->currentPage() }}</strong> of <strong>{{ $districts->lastPage() }}</strong>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    @can('add_users')
+    @can('add_districts')
     <div>
         <div class="fixed-bottom popupButton">
             <button @click="initCreate()" type="button" class="btn-raised btn btn-info btn-floating waves-effect waves-classic vertical-align-bottom float-right block font-size-20">
@@ -168,7 +169,7 @@
         </div>
     </div>
     @endcan
-    <!-- Modal Create -->
+    <!-- Modal  -->
     <div class="modal fade" id="modalCreate" aria-labelledby="modalCreatelLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-simple">
             <form class="modal-content">
@@ -176,37 +177,35 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="modalCreatelLabel">Add a New User</h4>
+                    <h4 class="modal-title" id="modalCreatelLabel">Add a New District</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xl-12" v-if="errors.length > 0">
-                            <div v-for="error_data in errors" class="alert alert-danger alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                @{{ error_data }}
-                            </div>
+                        <div class="col-xl-12 alert alert-danger" v-if="errors.length > 0">
+                            <ul>
+                                <li v-for="error_data in errors">@{{ error_data }}</li>
+                            </ul>
                         </div>
                         <div class="col-xl-12 form-group">
                             <h5>Name</h5>
-                            <input v-model="user.name" class="form-control" name="name" id="name" placeholder="Name" type="text">
-                        </div>
-
-                        <div class="col-xl-12 form-group">
-                            <h5>Email</h5>
-                            <input v-model="user.email" class="form-control" name="email" id="email" placeholder="Email" type="email" required>
+                            <input v-model="district.name" class="form-control" name="name" id="name" placeholder="Name" type="text">
                         </div>
                         <div class="col-xl-12 form-group">
-                            <h5>Password</h5>
-                            <input v-model="user.password" class="form-control" name="password" id="password" placeholder="Password" type="password" required>
+                            <h5>Code</h5>
+                            <input v-model="district.code" class="form-control" name="code" id="code" placeholder="Code" type="text">
                         </div>
                         <div class="col-xl-12 form-group">
-                            <h5>Assign Role</h5>
-                            <span v-for="role in roles" class="checkbox-custom checkbox-primary">
-                                <input v-model="assigned_roles" type="checkbox"  class="inputCheckbox" id="role.id" :value="role.id">
-                                <label for="inputCheckbox">@{{ role.name }}</label>
-                            </span>
+                            <h5>Abbreviation</h5>
+                            <input v-model="district.abbreviation" class="form-control" name="abbreviation" id="abbreviation" placeholder="Abbreviation" type="text">
+                        </div>
+                        <div class="col-xl-12 form-group">
+                            <h5>State</h5>
+                            <select v-model="district.state_id" class="form-control">
+                                <option disabled value="">Please select the state</option>
+                                <option v-for="state in states" :value="state.id">
+                                    @{{ state.name }}
+                                </option>
+                            </select>
                         </div>
                         <div class="col-md-12 float-right">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -217,8 +216,6 @@
             </form>
         </div>
     </div>
-    <!-- End Modal Create -->
-    <!-- Modal Edit -->
     <div class="modal fade" id="modalEdit" aria-labelledby="modalCreatelLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-simple">
             <form class="modal-content">
@@ -230,39 +227,35 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xl-12" v-if="errors.length > 0">
-                            <div v-for="error_data in errors" class="alert alert-danger alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                @{{ error_data }}
-                            </div>
+                        <div class="col-xl-12 alert alert-danger" v-if="errors.length > 0">
+                            <ul>
+                                <li v-for="error_data in errors">@{{ error_data }}</li>
+                            </ul>
                         </div>
                         <div class="col-xl-12 form-group">
                             <h5>Name</h5>
-                            <input v-model="user.name" class="form-control" name="name" id="name" placeholder="Name" type="text">
-                        </div>
-
-                        <div class="col-xl-12 form-group">
-                            <h5>Email</h5>
-                            <input v-model="user.email" class="form-control" name="email" id="email" placeholder="Email" type="email" required>
+                            <input v-model="district.name" class="form-control" name="name" placeholder="Name" type="text">
                         </div>
                         <div class="col-xl-12 form-group">
-                            <h5>Password</h5>
-                            <input v-model="user.password" class="form-control" name="password" id="password" placeholder="Password" type="password" required>
+                            <h5>Code</h5>
+                            <input v-model="district.code" class="form-control" name="code" id="code" placeholder="Code" type="text">
                         </div>
                         <div class="col-xl-12 form-group">
-                            <h5>Assign Role</h5>
-                            <span v-for="role in roles" class="checkbox-custom checkbox-primary">
-                                <input v-model="assigned_roles" type="checkbox"  class="inputCheckbox" id="role.id" :value="role.id">
-                                <label for="inputCheckbox">@{{ role.name }}</label>
-                            </span>
+                            <h5>Abbreviation</h5>
+                            <input v-model="district.abbreviation" class="form-control" name="abbreviation" id="abbreviation" placeholder="Abbreviation" type="text">
+                        </div>
+                        <div class="col-xl-12 form-group">
+                            <h5>State</h5>
+                            <select v-model="district.state_id" class="form-control">
+                                <option disabled value="">Please select the state</option>
+                                <option v-for="state in states" :value="state.id">
+                                    @{{ state.name }}
+                                </option>
+                            </select>
                         </div>
                         <div class="col-md-12 float-right">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            @can('edit_users')
                             <button @click="initUpdate" class="btn btn-primary waves-effect waves-classic" type="button">Submit</button>
-                            @endcan
                         </div>
                     </div>
                 </div>
@@ -281,7 +274,7 @@
                     <h4 class="modal-title">Please Confirm...</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Do you really wants to delete this user?</p>
+                    <p>Do you really wants to delete this record?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-pure waves-effect waves-classic" data-dismiss="modal">No</button>
@@ -302,7 +295,7 @@
                     <h4 class="modal-title">Please Confirm...</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Do you really wants to delete the selected users?</p>
+                    <p>Do you really wants to delete the selected records?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-pure waves-effect waves-classic" data-dismiss="modal">No</button>
@@ -327,13 +320,13 @@
             el: '#myApp',
             data() {
                 return {
-                    user: {
+                    district: {
                         name: '',
-                        email: '',
-                        password: '',
+                        code: '',
+                        abbreviation: '',
+                        state_id: '',
                     },
-                    roles: [],
-                    assigned_roles: [],
+                    states: [],
                     errors: [],
                     selectedIds: [],
                     rowIdArray: rowIds,
@@ -364,9 +357,12 @@
                 initCreate() {
                     this.errors = [];
                     this.reset();
-                    axios.get("{{ route('roles.list') }}")
+                    this.district.state_id = '37';
+
+                    axios.get('{{ route('states.list') }}')
                         .then(response => {
-                            this.roles = response.data;
+                            // JSON responses are automatically parsed.
+                            this.states = response.data;
                         })
                         .catch(e => {
                             this.errors.push(e)
@@ -375,75 +371,73 @@
                 },
                 initStore() {
                     this.errors = [];
-                    axios.post("{{ route('users.store') }}", {
-                        name: this.user.name,
-                        email: this.user.email,
-                        password: this.user.password,
-                        roles: this.assigned_roles,
+                    axios.post("{{ route('districts.store') }}", {
+                        name: this.district.name,
+                        code: this.district.code,
+                        abbreviation: this.district.abbreviation,
+                        state_id: this.district.state_id
                     })
                         .then(response => {
                             window.location = response.data.redirectTo;
                         })
                         .catch(error => {
                             this.errors = [];
-                            if (error.response.data.error) {
-                                this.errors.push(error.response.data.error);
-                            }
                             if (error.response.data.errors.name) {
                                 this.errors.push(error.response.data.errors.name[0]);
                             }
-                            if (error.response.data.errors.email) {
-                                this.errors.push(error.response.data.errors.email[0]);
+
+                            if (error.response.data.errors.code) {
+                                this.errors.push(error.response.data.errors.code[0]);
                             }
-                            if (error.response.data.errors.password) {
-                                this.errors.push(error.response.data.errors.password[0]);
+
+                            if (error.response.data.errors.abbreviation) {
+                                this.errors.push(error.response.data.errors.abbreviation[0]);
                             }
                         });
                 },
                 initEdit(index) {
                     this.errors = [];
-                    this.reset();
-                    axios.get('/users/'+index)
+                    axios.get('/districts/'+index)
                         .then(response => {
                             // JSON responses are automatically parsed.
-                            this.user = response.data.user;
-                            this.roles = response.data.roles;
-                            let myArray = this.assigned_roles;
-                            if (response.data.user.roles) {
-                                response.data.user.roles.forEach(function (selectedRoles) {
-                                    myArray.push(selectedRoles.id.toString());
-                                });
-                            }
-                            this.assigned_roles = myArray;
+                            this.district = response.data.district;
                         })
                         .catch(e => {
                             this.errors.push(e)
+                        });
+                    axios.get('{{ route('states.list') }}')
+                        .then(response => {
+                            // JSON responses are automatically parsed.
+                            this.states = response.data;
                         })
+                        .catch(e => {
+                            this.errors.push(e)
+                        });
+
                     $('#modalEdit').modal('show');
                 },
                 initUpdate() {
-                    axios.patch('/users/' + this.user.id, {
-                        name: this.user.name,
-                        email: this.user.email,
-                        password: this.user.password,
-                        roles: this.assigned_roles,
+                    axios.patch('/districts/' + this.district.id, {
+                        name: this.district.name,
+                        code: this.district.code,
+                        abbreviation: this.district.abbreviation,
+                        state_id: this.district.state_id
                     })
                         .then(response => {
                             window.location = response.data.redirectTo;
                         })
                         .catch(error => {
                             this.errors = [];
-                            if (error.response.data.error) {
-                                this.errors.push(error.response.data.error);
-                            }
                             if (error.response.data.errors.name) {
                                 this.errors.push(error.response.data.errors.name[0]);
                             }
-                            if (error.response.data.errors.email) {
-                                this.errors.push(error.response.data.errors.email[0]);
+
+                            if (error.response.data.errors.code) {
+                                this.errors.push(error.response.data.errors.code[0]);
                             }
-                            if (error.response.data.errors.password) {
-                                this.errors.push(error.response.data.errors.password[0]);
+
+                            if (error.response.data.errors.abbreviation) {
+                                this.errors.push(error.response.data.errors.abbreviation[0]);
                             }
                         });
                 },
@@ -452,15 +446,12 @@
                     $('#modalDelete').modal('show');
                 },
                 initDestroy(index) {
-                    axios.delete('/users/' + index)
+                    axios.delete('/districts/' + index)
                         .then(response => {
                             window.location = response.data.redirectTo;
                         })
                         .catch(error => {
-                            this.errors = [];
-                            if (error.response.data.error) {
-                                this.errors.push(error.response.data.error);
-                            }
+
                         });
                 },
                 initDeleteAll() {
@@ -469,8 +460,8 @@
                     }
                 },
                 initDestroyAll() {
-                    $('#modalDelete').modal('show');
-                    axios.delete('/users/0', { params: {
+                    $('#modalDelete').modal('hide');
+                    axios.delete('/districts/0', { params: {
                         delete_ids: this.selectedIds,
                     }
                     })
@@ -478,17 +469,14 @@
                             window.location = response.data.redirectTo;
                         })
                         .catch(error => {
-                            this.errors = [];
-                            if (error.response.data.error) {
-                                this.errors.push(error.response.data.error);
-                            }
+
                         });
                 },
                 reset() {
-                    this.user.name = '';
-                    this.user.email = '';
-                    this.user.password = '';
-                    this.assigned_roles = [];
+                    this.district.name = '';
+                    this.district.code = '';
+                    this.district.abbreviation = '';
+                    this.district.state_id = '';
                 },
             }
         });

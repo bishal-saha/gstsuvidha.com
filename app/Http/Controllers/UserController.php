@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\Authorizable;
 use App\User;
 use Validator;
 use Illuminate\Http\Request;
@@ -13,8 +14,10 @@ use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
+    use Authorizable;
+
     public function __construct() {
-        $this->middleware(['auth', 'isAdmin']);
+        $this->middleware(['auth']);
         //isAdmin middleware lets only users with a
         // //specific permission permission to access these resources
     }
@@ -93,7 +96,6 @@ class UserController extends Controller
         $roles = $request['roles']; //Retrieving the roles field
         //Checking if a role was selected
         if (isset($roles)) {
-
             foreach ($roles as $role) {
                 $role_r = Role::where('id', '=', $role)->firstOrFail();
                 $user->assignRole($role_r); //Assigning role to user
@@ -184,8 +186,10 @@ class UserController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        //Find a user with a given id and delete
-        if($id) {
+        if ( Auth::user()->id == $id ) {
+            $msg = 'Deletion of currently logged in user is not allowed';
+            $alert_type = 'warning';
+        } else if($id) {
             $user = User::findOrFail($id);
             $user_name = $user->name;
             $user->delete();

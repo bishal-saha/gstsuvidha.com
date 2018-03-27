@@ -99,6 +99,16 @@ $route_name = Route::current()->getName();
                                     <span class="site-menu-title">Permissions</span>
                                 </a>
                             </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link" href="{{ route('states.index') }}">
+                                    <span class="site-menu-title">States</span>
+                                </a>
+                            </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link" href="{{ route('districts.index') }}">
+                                    <span class="site-menu-title">Districts</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="site-menu-item has-sub">

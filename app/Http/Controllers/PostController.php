@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Traits\Authorizable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    use Authorizable;
     public function __construct() {
         $this->middleware(['auth', 'clearance'])->except('index', 'show');
     }
